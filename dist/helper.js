@@ -7,10 +7,13 @@
     if (!el) {
       return;
     }
-    el.innerHTML = Typist.renderVariants(el.textContent, INSTALL_OPTIONS.variants);
-    return new Typist(el.querySelector('.typist-element'), {
+    el.innerHTML = Typist.renderVariants(el.textContent, INSTALL_OPTIONS.variants, {
+      className: 'eager-typist-element'
+    });
+    return new Typist(el.querySelector('eager-typist-element'), {
       letterInterval: 60,
-      textInterval: 3000
+      textInterval: 3000,
+      selectClassName: 'eager-typist-selected'
     });
   };
 

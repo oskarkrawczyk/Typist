@@ -1,4 +1,6 @@
-@Typist.renderVariants = (content, alts) ->
+@Typist.renderVariants = (content, alts, options={}) ->
+  className = options.className or 'typist-element'
+
   cWords = content.split(' ')
 
   parts = {}
@@ -33,7 +35,7 @@
     variants.push words.slice(parts[i].start, words.length - parts[i].end).join(' ').replace(/'/g, "\\'")
 
   out = cWords.slice(0, maxP.start).join(' ')
-  out += " <span class='typist-element' data-typist='#{ variants.join(',') }'>"
+  out += " <span class='#{ className }' data-typist='#{ variants.join(',') }'>"
   out += cWords.slice(maxP.start, cWords.length - maxP.end).join(' ')
   out += "</span> "
   out += cWords.slice(cWords.length - maxP.end).join(' ')

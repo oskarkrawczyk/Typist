@@ -1,6 +1,10 @@
 (function() {
-  this.Typist.renderVariants = function(content, alts) {
-    var cWords, end, i, maxP, out, part, parts, start, v, variant, variants, word, words, _, _i, _j, _k, _len, _len1, _len2, _ref;
+  this.Typist.renderVariants = function(content, alts, options) {
+    var cWords, className, end, i, maxP, out, part, parts, start, v, variant, variants, word, words, _, _i, _j, _k, _len, _len1, _len2, _ref;
+    if (options == null) {
+      options = {};
+    }
+    className = options.className || 'typist-element';
     cWords = content.split(' ');
     parts = {};
     start = 0;
@@ -45,7 +49,7 @@
       variants.push(words.slice(parts[i].start, words.length - parts[i].end).join(' ').replace(/'/g, "\\'"));
     }
     out = cWords.slice(0, maxP.start).join(' ');
-    out += " <span class='typist-element' data-typist='" + (variants.join(',')) + "'>";
+    out += " <span class='" + className + "' data-typist='" + (variants.join(',')) + "'>";
     out += cWords.slice(maxP.start, cWords.length - maxP.end).join(' ');
     out += "</span> ";
     out += cWords.slice(cWords.length - maxP.end).join(' ');
