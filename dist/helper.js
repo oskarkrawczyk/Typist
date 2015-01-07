@@ -3,12 +3,12 @@
 
   load = function() {
     var el;
-    el = document.querySelector(INSTALL_OPTIONS.location.selector);
+    el = document.querySelector(INSTALL_OPTIONS.location);
     if (!el) {
       return;
     }
     el.innerHTML = Typist.renderVariants(el.textContent, INSTALL_OPTIONS.variants);
-    return new Typist(el, {
+    return new Typist(el.querySelector('.typist-element'), {
       letterInterval: 60,
       textInterval: 3000
     });
