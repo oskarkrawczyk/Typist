@@ -2,7 +2,7 @@ load = ->
   el = document.querySelector(INSTALL_OPTIONS.location)
   return unless el
 
-  el.innerHTML = Typist.renderVariants el.innerHTML, INSTALL_OPTIONS.variants
+  el.innerHTML = Typist.renderVariants el.textContent, INSTALL_OPTIONS.variants
 
   new Typist el.querySelector('.typist-element'),
     letterInterval: 60
