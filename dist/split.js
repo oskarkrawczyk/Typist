@@ -28,7 +28,7 @@
           break;
         }
       }
-      _ref = words.reverse();
+      _ref = words.slice().reverse();
       for (i = _l = 0, _len3 = _ref.length; _l < _len3; i = ++_l) {
         word = _ref[i];
         if (word !== cWords[cWords.length - i - 1]) {

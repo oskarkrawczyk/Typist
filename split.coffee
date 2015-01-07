@@ -18,7 +18,7 @@
         parts[v].start = i
         break
 
-    for word, i in words.reverse()
+    for word, i in words.slice().reverse()
       if word != cWords[cWords.length - i - 1]
         parts[v].end = i
         break
