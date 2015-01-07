@@ -3,7 +3,7 @@
     "body": [
       {
         "type": "style",
-        "src" ./style.css"
+        "src": "./style.css"
       },
       {
         "type": "script",
