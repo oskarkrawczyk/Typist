@@ -2,13 +2,15 @@
   className = options.className or 'typist-element'
 
   cWords = content.split(' ')
+  altWords = []
+  for alt in alts
+    alt or= ''
+    altWords.push alt.split(' ')
 
   parts = {}
   start = 0
   end = cWords.length
-  for variant, v in alts
-    words = variant.split(' ')
-
+  for words, v in altWords
     parts[v] = {start: 0, end: 0}
 
     for word, i in words
@@ -30,8 +32,7 @@
       maxP.end = part.end
 
   variants = []
-  for i, variant of alts
-    words = variant.split(' ')
+  for words, i in altWords
     variants.push words.slice(parts[i].start, words.length - parts[i].end).join(' ').replace(/'/g, "\\'")
 
   out = cWords.slice(0, maxP.start).join(' ')

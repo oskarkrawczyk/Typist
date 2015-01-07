@@ -1,22 +1,27 @@
 (function() {
   this.Typist.renderVariants = function(content, alts, options) {
-    var cWords, className, end, i, maxP, out, part, parts, start, v, variant, variants, word, words, _, _i, _j, _k, _len, _len1, _len2, _ref;
+    var alt, altWords, cWords, className, end, i, maxP, out, part, parts, start, v, variants, word, words, _, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
     if (options == null) {
       options = {};
     }
     className = options.className || 'typist-element';
     cWords = content.split(' ');
+    altWords = [];
+    for (_i = 0, _len = alts.length; _i < _len; _i++) {
+      alt = alts[_i];
+      alt || (alt = '');
+      altWords.push(alt.split(' '));
+    }
     parts = {};
     start = 0;
     end = cWords.length;
-    for (v = _i = 0, _len = alts.length; _i < _len; v = ++_i) {
-      variant = alts[v];
-      words = variant.split(' ');
+    for (v = _j = 0, _len1 = altWords.length; _j < _len1; v = ++_j) {
+      words = altWords[v];
       parts[v] = {
         start: 0,
         end: 0
       };
-      for (i = _j = 0, _len1 = words.length; _j < _len1; i = ++_j) {
+      for (i = _k = 0, _len2 = words.length; _k < _len2; i = ++_k) {
         word = words[i];
         if (word !== cWords[i]) {
           parts[v].start = i;
@@ -24,7 +29,7 @@
         }
       }
       _ref = words.reverse();
-      for (i = _k = 0, _len2 = _ref.length; _k < _len2; i = ++_k) {
+      for (i = _l = 0, _len3 = _ref.length; _l < _len3; i = ++_l) {
         word = _ref[i];
         if (word !== cWords[cWords.length - i - 1]) {
           parts[v].end = i;
@@ -43,9 +48,8 @@
       }
     }
     variants = [];
-    for (i in alts) {
-      variant = alts[i];
-      words = variant.split(' ');
+    for (i = _m = 0, _len4 = altWords.length; _m < _len4; i = ++_m) {
+      words = altWords[i];
       variants.push(words.slice(parts[i].start, words.length - parts[i].end).join(' ').replace(/'/g, "\\'"));
     }
     out = cWords.slice(0, maxP.start).join(' ');
