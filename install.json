@@ -27,8 +27,8 @@
     "properties": {
       "location": {
         "title": "Location",
-        "type": "object",
-        "format": "element"
+        "type": "string",
+        "format": "selector"
       },
       "variants": {
         "title": "Variants",
