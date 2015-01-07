@@ -1,5 +1,5 @@
 load = ->
-  el = document.querySelector(INSTALL_OPTIONS.location)
+  el = document.querySelector(INSTALL_OPTIONS.location.selector)
   return unless el
 
   el.innerHTML = Typist.renderVariants el.textContent, INSTALL_OPTIONS.variants

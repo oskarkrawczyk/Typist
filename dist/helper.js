@@ -3,7 +3,7 @@
 
   load = function() {
     var el;
-    el = document.querySelector(INSTALL_OPTIONS.location);
+    el = document.querySelector(INSTALL_OPTIONS.location.selector);
     if (!el) {
       return;
     }
