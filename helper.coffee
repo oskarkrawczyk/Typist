@@ -1,10 +1,10 @@
 load = ->
-  el = document.querySelector(INSTALL_OPTIONS.location.selector)
+  el = document.querySelector(INSTALL_OPTIONS.location)
   return unless el
 
   el.innerHTML = Typist.renderVariants el.textContent, INSTALL_OPTIONS.variants
 
-  new Typist el,
+  new Typist el.querySelector('.typist-element'),
     letterInterval: 60
     textInterval:   3000
 
