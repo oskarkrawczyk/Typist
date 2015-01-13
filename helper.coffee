@@ -8,7 +8,7 @@ load = (options) ->
   if options.showSelection
     stylesHTML += """
       .eager-typist-element .eager-typist-selected {
-        font-style: none;
+        font-style: normal;
         color: #fff;
         background: #000;
         color: #{ options.selectedColor };
