@@ -28,7 +28,8 @@
       "location": {
         "title": "Location",
         "type": "string",
-        "format": "selector"
+        "format": "selector",
+        "description": "Select the heading you would like to apply Typist to."
       },
       "variants": {
         "title": "Variants",
@@ -36,7 +37,7 @@
         "items": {
           "type": "string",
           "title": "Variant",
-          "description": "The alternative content you would like to appear in the region selected.  Will replace all the text in that region."
+          "description": "The alternative content you would like to appear in the region selected.  Will replace all the text in that region, but only the text which is different will be dynamically typed."
         }
       }
     }
