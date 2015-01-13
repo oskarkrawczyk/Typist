@@ -28,16 +28,35 @@
         "format": "selector",
         "description": "Select the region of text you would like to apply Typist to."
       },
-      "showSelection": {
+      "typingStyle": {
         "order": 1,
-        "title": "Show selection",
-        "type": "boolean",
-        "default": true
+        "title": "Typing style",
+        "type": "string",
+        "format": "radios",
+        "enum": [
+          "cursor",
+          "selection"
+        ],
+        "enumNames": {
+          "cursor": "Blinking cursor<span class=\"help-text\">Variation text gets typed out and backspaced.</span>",
+          "selection": "Selected text<span class=\"help-text\">Variation text is selected and then typed over.</span>"
+        },
+        "default": "cursor"
       },
-      "selectedColor": {
+      "cursorColor": {
         "order": 2,
         "showIf": {
-          "showSelection": true
+          "typingStyle": "cursor"
+        },
+        "title": "Cursor color",
+        "type": "string",
+        "format": "color",
+        "default": "#00a549"
+      },
+      "selectedColor": {
+        "order": 3,
+        "showIf": {
+          "typingStyle": "selection"
         },
         "title": "Selected text color",
         "type": "string",
@@ -45,39 +64,23 @@
         "default": "#ffffff"
       },
       "selectedBackgroundColor": {
-        "order": 3,
+        "order": 4,
         "showIf": {
-          "showSelection": true
+          "typingStyle": "selection"
         },
         "title": "Selected text background color",
         "type": "string",
         "format": "color",
         "default": "#00a549"
       },
-      "showBlinkingCursor": {
-        "order": 4,
-        "title": "Show blinking cursor",
-        "type": "boolean",
-        "default": true
-      },
-      "cursorColor": {
+      "variations": {
         "order": 5,
-        "showIf": {
-          "showBlinkingCursor": true
-        },
-        "title": "Cursor color",
-        "type": "string",
-        "format": "color",
-        "default": "#00a549"
-      },
-      "variants": {
-        "order": 6,
-        "title": "Variants",
-        "description": "The alternative content you would like to appear in the region selected. Will replace all the text in that region, but only the text which is different will be dynamically typed.",
+        "title": "Variations",
+        "description": "The alternative text you want to appear in the region selected above. This will replace all the text in that region, but only the text which is different will get “typed out”.",
         "type": "array",
         "items": {
           "type": "string",
-          "title": "Variant"
+          "title": "Variation text"
         }
       }
     }

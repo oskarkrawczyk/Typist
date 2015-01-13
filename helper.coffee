@@ -5,26 +5,12 @@ load = (options) ->
   styles = document.createElement 'div'
   stylesHTML = '<style>'
 
-  if options.showSelection
-    stylesHTML += """
-      .eager-typist-element .eager-typist-selected {
-        font-style: normal;
-        color: #fff;
-        background: #000;
-        color: #{ options.selectedColor };
-        background: #{ options.selectedBackgroundColor };
-      }
-    """
-
-  else
+  if options.typingStyle is 'cursor'
     stylesHTML += """
       .eager-typist-element .eager-typist-selected {
         display: none;
       }
-    """
 
-  if options.showBlinkingCursor
-    stylesHTML += """
       @keyframes eager-typist-blinking-cursor {
         0% { opacity: 1.0; }
         50% { opacity: 0.0; }
@@ -46,6 +32,17 @@ load = (options) ->
         -webkit-animation: eager-typist-blinking-cursor 1s step-start 0s infinite;
         background: #000;
         background: #{ options.cursorColor };
+      }
+    """
+
+  if options.typingStyle is 'selection'
+    stylesHTML += """
+      .eager-typist-element .eager-typist-selected {
+        font-style: normal;
+        color: #fff;
+        background: #000;
+        color: #{ options.selectedColor };
+        background: #{ options.selectedBackgroundColor };
       }
     """
 
