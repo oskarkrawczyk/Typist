@@ -38,7 +38,7 @@ load = (options) ->
       }
 
       .eager-typist-element:after {
-        content: "\00a0";
+        content: "\\00a0";
         display: inline-block;
         margin-left: .125em;
         width: .125em;
