@@ -22,17 +22,20 @@
   "options": {
     "properties": {
       "location": {
+        "order": 0,
         "title": "Location",
         "type": "string",
         "format": "selector",
         "description": "Select the region of text you would like to apply Typist to."
       },
       "showSelection": {
+        "order": 1,
         "title": "Show selection",
         "type": "boolean",
         "default": true
       },
       "selectedColor": {
+        "order": 2,
         "showIf": {
           "showSelection": true
         },
@@ -42,6 +45,7 @@
         "default": "#ffffff"
       },
       "selectedBackgroundColor": {
+        "order": 3,
         "showIf": {
           "showSelection": true
         },
@@ -51,11 +55,13 @@
         "default": "#00a549"
       },
       "showBlinkingCursor": {
+        "order": 4,
         "title": "Show blinking cursor",
         "type": "boolean",
         "default": true
       },
       "cursorColor": {
+        "order": 5,
         "showIf": {
           "showBlinkingCursor": true
         },
@@ -65,6 +71,7 @@
         "default": "#00a549"
       },
       "variants": {
+        "order": 6,
         "title": "Variants",
         "description": "The alternative content you would like to appear in the region selected. Will replace all the text in that region, but only the text which is different will be dynamically typed.",
         "type": "array",

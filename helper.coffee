@@ -3,7 +3,7 @@ load = (options) ->
   return unless el
 
   styles = document.createElement 'div'
-  stylesHTML = '<styles>'
+  stylesHTML = '<style>'
 
   if options.showSelection
     stylesHTML += """
@@ -49,7 +49,7 @@ load = (options) ->
       }
     """
 
-  stylesHTML += '</styles>'
+  stylesHTML += '</style>'
   styles.innerHTML = stylesHTML
 
   document.body.appendChild styles
