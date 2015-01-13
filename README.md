@@ -8,10 +8,11 @@ Typist is fully compatible with **responsive layouts.**
 ## Setup
 You can install Typist via Bower with `bower install Typist` or download `typist.js` and include it the old-fashined way.
 
-You can also install Typist directly into a website with [Eager](https://eager.io).
+You can also preview and install Typist directly on your website with [Eager](https://eager.io/app/z1o4cnLQKenU/install).
 
-<a href="https://eager.io/app/z1o4cnLQKenU/install?source=button">
-  <img src="https://install.eager.io/install-button.png" border="0" width="126">
+<a href="https://eager.io/app/z1o4cnLQKenU/install" target="_blank" data-eager-button>
+  <img src="https://install.eager.io/button.png" alt="Install with Eager" width="126">
+  <script src="https://install.eager.io/embed.js"></script>
 </a>
 
 ## Basic Typist
