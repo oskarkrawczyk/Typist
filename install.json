@@ -2,10 +2,6 @@
   "resources": {
     "body": [
       {
-        "type": "style",
-        "src": "./style.css"
-      },
-      {
         "type": "script",
         "src": "./dist/typist.js"
       },
@@ -19,7 +15,7 @@
       },
       {
         "type": "script",
-        "contents": "TypistInstallHelper.init()"
+        "contents": "TypistInstallHelper.init(INSTALL_OPTIONS);"
       }
     ]
   },
@@ -29,15 +25,52 @@
         "title": "Location",
         "type": "string",
         "format": "selector",
-        "description": "Select the heading you would like to apply Typist to."
+        "description": "Select the region of text you would like to apply Typist to."
+      },
+      "showSelection": {
+        "title": "Show selection",
+        "type": "boolean",
+        "default": true
+      },
+      "selectedColor": {
+        "showIf": {
+          "showSelection": true
+        },
+        "title": "Selected text color",
+        "type": "string",
+        "format": "color",
+        "default": "#ffffff"
+      },
+      "selectedBackgroundColor": {
+        "showIf": {
+          "showSelection": true
+        },
+        "title": "Selected text background color",
+        "type": "string",
+        "format": "color",
+        "default": "#00a549"
+      },
+      "showBlinkingCursor": {
+        "title": "Show blinking cursor",
+        "type": "boolean",
+        "default": true
+      },
+      "cursorColor": {
+        "showIf": {
+          "showBlinkingCursor": true
+        },
+        "title": "Cursor color",
+        "type": "string",
+        "format": "color",
+        "default": "#00a549"
       },
       "variants": {
         "title": "Variants",
+        "description": "The alternative content you would like to appear in the region selected. Will replace all the text in that region, but only the text which is different will be dynamically typed.",
         "type": "array",
         "items": {
           "type": "string",
-          "title": "Variant",
-          "description": "The alternative content you would like to appear in the region selected.  Will replace all the text in that region, but only the text which is different will be dynamically typed."
+          "title": "Variant"
         }
       }
     }
