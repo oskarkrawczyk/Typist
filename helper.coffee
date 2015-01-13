@@ -51,7 +51,7 @@ load = (options) ->
 
   document.body.appendChild styles
 
-  el.innerHTML = Typist.renderVariants el.textContent, options.variants,
+  el.innerHTML = Typist.renderVariants el.textContent, options.variations,
     className: 'eager-typist-element'
 
   new Typist el.querySelector('.eager-typist-element'),

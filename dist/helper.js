@@ -18,7 +18,7 @@
     stylesHTML += '</style>';
     styles.innerHTML = stylesHTML;
     document.body.appendChild(styles);
-    el.innerHTML = Typist.renderVariants(el.textContent, options.variants, {
+    el.innerHTML = Typist.renderVariants(el.textContent, options.variations, {
       className: 'eager-typist-element'
     });
     return new Typist(el.querySelector('.eager-typist-element'), {
