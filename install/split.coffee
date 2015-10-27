@@ -33,7 +33,7 @@
 
   variants = []
   for words, i in altWords
-    variants.push words.slice(maxP.start, words.length - maxP.end).join(' ').replace(/'/g, "\\'")
+    variants.push words.slice(maxP.start, words.length - maxP.end).join(' ').replace(/'/g, "\\'").replace(/,/g, '&#44;')
 
   out = cWords.slice(0, maxP.start).join(' ')
   out += " <span class='#{ className }' data-typist='#{ variants.join(',') }'>"
