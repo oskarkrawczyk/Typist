@@ -148,9 +148,14 @@
     };
 
     Typist.prototype.fetchVariations = function(element) {
-      var text, value, variations;
+      var i, text, v, value, variations, _i, _len;
       text = element.getAttribute("data-typist");
+      text = text.replace(/\\,/g, '!COMMA!');
       variations = text.split(",");
+      for (i = _i = 0, _len = variations.length; _i < _len; i = ++_i) {
+        v = variations[i];
+        variations[i] = v.replace(/!COMMA!/g, ',');
+      }
       value = this._getHtml(element);
       variations.splice(0, 0, value);
       return variations;

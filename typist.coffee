@@ -85,7 +85,11 @@ class @Typist extends Utilities
 
   fetchVariations: (element) =>
     text       = element.getAttribute "data-typist"
+    text       = text.replace /\\,/g, '!COMMA!'
     variations = text.split ","
+
+    for v, i in variations
+      variations[i] = v.replace /!COMMA!/g, ','
 
     value      = @_getHtml element
     variations.splice 0, 0, value

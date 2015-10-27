@@ -50,7 +50,7 @@
     variants = [];
     for (i = _m = 0, _len4 = altWords.length; _m < _len4; i = ++_m) {
       words = altWords[i];
-      variants.push(words.slice(maxP.start, words.length - maxP.end).join(' ').replace(/'/g, "\\'").replace(/,/g, '&#44;'));
+      variants.push(words.slice(maxP.start, words.length - maxP.end).join(' ').replace(/'/g, "\\'").replace(/,/g, '\\,'));
     }
     out = cWords.slice(0, maxP.start).join(' ');
     out += " <span class='" + className + "' data-typist='" + (variants.join(',')) + "'>";
