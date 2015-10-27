@@ -137,11 +137,23 @@
     };
 
     Typist.prototype.slide = function(forcedText) {
+      var delay, _i, _len, _ref;
       this.offsets.current.text = this.variations[this.offsets.current.index];
       this.offsets.current.text = this.offsets.current.text.split("");
+      if (this.selectDelays) {
+        _ref = this.selectDelays;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          delay = _ref[_i];
+          clearTimeout(delay);
+        }
+      }
+      this.selectDelays = [];
       this._each(this.offsets.current.text, this.selectText);
       this.offsets.current.index = this.next(this.offsets.current.index);
-      this._delay((function(_this) {
+      if (this.slideDelay) {
+        clearTimeout(this.slideDelay);
+      }
+      this.slideDelay = this._delay((function(_this) {
         return function() {
           _this.options.currentSlideIndex = _this.offsets.current.index;
           return _this.typeText(_this.variations[_this.offsets.current.index]);
@@ -171,11 +183,11 @@
     };
 
     Typist.prototype.selectText = function(letter, index) {
-      return this._delay((function(_this) {
+      return this.selectDelays.push(this._delay((function(_this) {
         return function() {
           return _this.selectOffset((_this.offsets.current.text.length - index) - 1);
         };
-      })(this), index * this.options.letterSelectInterval);
+      })(this), index * this.options.letterSelectInterval));
     };
 
     Typist.prototype.selectOffset = function(offset) {
@@ -189,24 +201,36 @@
     };
 
     Typist.prototype.typeText = function(text) {
+      var delay, _i, _len, _ref;
       this.typeTextSplit = text.split("");
+      if (this.typingDelays) {
+        _ref = this.typingDelays;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          delay = _ref[_i];
+          clearTimeout(delay);
+        }
+      }
+      this.typingDelays = [];
       this._each(this.typeTextSplit, this.typeLetters);
       return this._fireEvent("onSlide", text);
     };
 
     Typist.prototype.typeLetters = function(letter, index) {
       clearInterval(this.timer);
-      return this._delay((function(_this) {
+      return this.typingDelays.push(this._delay((function(_this) {
         return function() {
           return _this.typeLetter(letter, index);
         };
-      })(this), index * this.options.letterSelectInterval);
+      })(this), index * this.options.letterSelectInterval));
     };
 
     Typist.prototype.typeLetter = function(letter, index) {
       this._empty(this.elements.typist);
       this.newText.push(letter);
       this._setHtml(this.elements.typist, this.newText.join(""));
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
       if (this.typeTextSplit.length === index + 1) {
         return this.timer = this._periodical(this.slide, this.options.interval);
       }

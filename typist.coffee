@@ -88,13 +88,22 @@ class @Typist extends Utilities
     # split it up into letters
     @offsets.current.text = @offsets.current.text.split ""
 
+    if @selectDelays
+      for delay in @selectDelays
+        clearTimeout delay
+
+    @selectDelays = []
+
     # select text per letter
     @_each @offsets.current.text, @selectText
 
     # set the next index
     @offsets.current.index = @next @offsets.current.index
 
-    @_delay =>
+    if @slideDelay
+      clearTimeout @slideDelay
+
+    @slideDelay = @_delay =>
       @options.currentSlideIndex = @offsets.current.index
       @typeText @variations[@offsets.current.index]
     , @options.letterSelectInterval * @offsets.current.text.length
@@ -121,7 +130,7 @@ class @Typist extends Utilities
     variations
 
   selectText: (letter, index) =>
-    @_delay =>
+    @selectDelays.push @_delay =>
       @selectOffset (@offsets.current.text.length - index) - 1
     , index * @options.letterSelectInterval
 
@@ -139,6 +148,12 @@ class @Typist extends Utilities
     # split word into letters
     @typeTextSplit = text.split ""
 
+    if @typingDelays
+      for delay in @typingDelays
+        clearTimeout delay
+
+    @typingDelays = []
+
     # type each letter individually
     @_each @typeTextSplit, @typeLetters
 
@@ -148,7 +163,7 @@ class @Typist extends Utilities
     clearInterval @timer
 
     # add some delay between typing letters
-    @_delay =>
+    @typingDelays.push @_delay =>
       @typeLetter letter, index
     , index * @options.letterSelectInterval
 
@@ -157,6 +172,9 @@ class @Typist extends Utilities
 
     @newText.push letter
     @_setHtml @elements.typist, @newText.join ""
+
+    if @timer
+      clearInterval @timer
 
     if @typeTextSplit.length is index + 1
       @timer = @_periodical @slide, @options.interval
