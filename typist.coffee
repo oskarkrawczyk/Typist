@@ -81,6 +81,11 @@ class @Typist extends Utilities
     @timer      = @_delay @slide, @options.interval
 
   slide: (forcedText) =>
+    if @timer
+      clearTimeout @timer
+
+    @slideCount or= 0
+    @slideCount++
 
     # pick the variation text
     @offsets.current.text = @variations[@offsets.current.index]
@@ -93,6 +98,15 @@ class @Typist extends Utilities
         clearTimeout delay
 
     @selectDelays = []
+
+    if @typingDelays
+      for delay in @typingDelays
+        clearTimeout delay
+
+    @typingDelays = []
+
+    @typedIndex = 0
+    @selectedIndex = 0
 
     # select text per letter
     @_each @offsets.current.text, @selectText
@@ -130,7 +144,12 @@ class @Typist extends Utilities
     variations
 
   selectText: (letter, index) =>
+    sc = @slideCount
+
     @selectDelays.push @_delay =>
+      if @slideCount isnt sc
+        return
+
       @selectOffset (@offsets.current.text.length - index) - 1
     , index * @options.letterSelectInterval
 
@@ -144,15 +163,8 @@ class @Typist extends Utilities
     @_setHtml @elements.typist, """#{unselected}<em class="#{@options.selectClassName}">#{selected}</em>"""
 
   typeText: (text) =>
-
     # split word into letters
     @typeTextSplit = text.split ""
-
-    if @typingDelays
-      for delay in @typingDelays
-        clearTimeout delay
-
-    @typingDelays = []
 
     # type each letter individually
     @_each @typeTextSplit, @typeLetters
@@ -160,10 +172,14 @@ class @Typist extends Utilities
     @_fireEvent "onSlide", text
 
   typeLetters: (letter, index) =>
-    clearInterval @timer
-
+    sc = @slideCount
     # add some delay between typing letters
     @typingDelays.push @_delay =>
+      if @slideCount isnt sc
+        return
+
+      @typedIndex = index
+
       @typeLetter letter, index
     , index * @options.letterSelectInterval
 
@@ -172,9 +188,6 @@ class @Typist extends Utilities
 
     @newText.push letter
     @_setHtml @elements.typist, @newText.join ""
-
-    if @timer
-      clearTimeout @timer
 
     if @typeTextSplit.length is index + 1
       @timer = @_delay @slide, @options.interval

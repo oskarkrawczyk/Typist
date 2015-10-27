@@ -137,7 +137,12 @@
     };
 
     Typist.prototype.slide = function(forcedText) {
-      var delay, _i, _len, _ref;
+      var delay, _i, _j, _len, _len1, _ref, _ref1;
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.slideCount || (this.slideCount = 0);
+      this.slideCount++;
       this.offsets.current.text = this.variations[this.offsets.current.index];
       this.offsets.current.text = this.offsets.current.text.split("");
       if (this.selectDelays) {
@@ -148,6 +153,16 @@
         }
       }
       this.selectDelays = [];
+      if (this.typingDelays) {
+        _ref1 = this.typingDelays;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          delay = _ref1[_j];
+          clearTimeout(delay);
+        }
+      }
+      this.typingDelays = [];
+      this.typedIndex = 0;
+      this.selectedIndex = 0;
       this._each(this.offsets.current.text, this.selectText);
       this.offsets.current.index = this.next(this.offsets.current.index);
       if (this.slideDelay) {
@@ -183,8 +198,13 @@
     };
 
     Typist.prototype.selectText = function(letter, index) {
+      var sc;
+      sc = this.slideCount;
       return this.selectDelays.push(this._delay((function(_this) {
         return function() {
+          if (_this.slideCount !== sc) {
+            return;
+          }
           return _this.selectOffset((_this.offsets.current.text.length - index) - 1);
         };
       })(this), index * this.options.letterSelectInterval));
@@ -201,24 +221,20 @@
     };
 
     Typist.prototype.typeText = function(text) {
-      var delay, _i, _len, _ref;
       this.typeTextSplit = text.split("");
-      if (this.typingDelays) {
-        _ref = this.typingDelays;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          delay = _ref[_i];
-          clearTimeout(delay);
-        }
-      }
-      this.typingDelays = [];
       this._each(this.typeTextSplit, this.typeLetters);
       return this._fireEvent("onSlide", text);
     };
 
     Typist.prototype.typeLetters = function(letter, index) {
-      clearInterval(this.timer);
+      var sc;
+      sc = this.slideCount;
       return this.typingDelays.push(this._delay((function(_this) {
         return function() {
+          if (_this.slideCount !== sc) {
+            return;
+          }
+          _this.typedIndex = index;
           return _this.typeLetter(letter, index);
         };
       })(this), index * this.options.letterSelectInterval));
@@ -228,9 +244,6 @@
       this._empty(this.elements.typist);
       this.newText.push(letter);
       this._setHtml(this.elements.typist, this.newText.join(""));
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
       if (this.typeTextSplit.length === index + 1) {
         return this.timer = this._delay(this.slide, this.options.interval);
       }
