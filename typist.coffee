@@ -46,9 +46,7 @@ class Utilities
     object
 
 class @Typist extends Utilities
-
   constructor: (element, options = {}) ->
-
     @options =
       typist:               element
       letterSelectInterval: 60
@@ -57,11 +55,9 @@ class @Typist extends Utilities
 
     @options = @_extend @options, options
 
-    # elements
     @elements =
       typist: @options.typist
 
-    # current values
     @offsets =
       current:
         index: 0
@@ -70,124 +66,75 @@ class @Typist extends Utilities
     @setupDefaults() if @elements.typist
 
   setupDefaults: =>
-
-    # fetch all variations
     @variations = @fetchVariations @elements.typist
 
-    # this is for later
-    @newText    = []
+    @_delay @start, @options.interval
 
-    # set up the timer
-    @timer      = @_delay @slide, @options.interval
+  start: =>
+    @currentVariation = @variations[@offsets.current.index]
+    @offsets.current.text = @currentVariation.split ''
 
-  slide: (forcedText) =>
-    if @timer
-      clearTimeout @timer
+    @selectText()
 
-    @slideCount or= 0
-    @slideCount++
+  next: =>
+    @offsets.current.index++
+    @offsets.current.index = @offsets.current.index % @variations.length
 
-    # pick the variation text
-    @offsets.current.text = @variations[@offsets.current.index]
-
-    # split it up into letters
-    @offsets.current.text = @offsets.current.text.split ""
-
-    if @selectDelays
-      for delay in @selectDelays
-        clearTimeout delay
-
-    @selectDelays = []
-
-    if @typingDelays
-      for delay in @typingDelays
-        clearTimeout delay
-
-    @typingDelays = []
-
-    @typedIndex = 0
-    @selectedIndex = 0
-
-    # select text per letter
-    @_each @offsets.current.text, @selectText
-
-    # set the next index
-    @offsets.current.index = @next @offsets.current.index
-
-    if @slideDelay
-      clearTimeout @slideDelay
-
-    @slideDelay = @_delay =>
-      @options.currentSlideIndex = @offsets.current.index
-      @typeText @variations[@offsets.current.index]
-    , @options.letterSelectInterval * @offsets.current.text.length
-
-    # loop index
-    if @variations.length <= @offsets.current.index
-      @offsets.current.index = 0
-    else if @offsets.current.index is 0
-      @offsets.current.index = @variations.length
-    else
-      @offsets.current.index = @offsets.current.index
-
-    # empty the array with the newly typed text
-    @newText.length = 0
-
-  next: (offset) =>
-    offset = offset + 1
+    @currentVariation = @variations[@offsets.current.index]
+    @offsets.current.text = @currentVariation.split ''
 
   fetchVariations: (element) =>
     text       = element.getAttribute "data-typist"
-    value      = @_getHtml element
     variations = text.split ","
+
+    value      = @_getHtml element
     variations.splice 0, 0, value
+
     variations
 
-  selectText: (letter, index) =>
-    sc = @slideCount
+  selectText: (index=0) =>
+    offset = (@offsets.current.text.length - index) - 1
+    if offset >= 0
+      @selectOffset offset
 
-    @selectDelays.push @_delay =>
-      if @slideCount isnt sc
-        return
-
-      @selectOffset (@offsets.current.text.length - index) - 1
-    , index * @options.letterSelectInterval
+    if offset > 0
+      @_delay =>
+        @selectText index + 1
+      , @options.letterSelectInterval
+    else
+      @_delay =>
+        @next()
+        @typeText()
+      , @options.letterSelectInterval
 
   selectOffset: (offset) =>
     text       = @offsets.current.text
-    selected   = text.slice offset, text.length
-    selected   = selected.join ""
-    unselected = text.slice 0, offset
-    unselected = unselected.join ""
+
+    selected   = text.slice(offset, text.length).join ''
+    unselected = text.slice(0, offset).join ''
 
     @_setHtml @elements.typist, """#{unselected}<em class="#{@options.selectClassName}">#{selected}</em>"""
 
-  typeText: (text) =>
-    # split word into letters
-    @typeTextSplit = text.split ""
+  typeText: =>
+    @typeTextSplit = @currentVariation.split ""
 
-    # type each letter individually
-    @_each @typeTextSplit, @typeLetters
+    @typeLetter()
 
-    @_fireEvent "onSlide", text
+    @_fireEvent "onSlide", @currentVariation
 
-  typeLetters: (letter, index) =>
-    sc = @slideCount
-    # add some delay between typing letters
-    @typingDelays.push @_delay =>
-      if @slideCount isnt sc
-        return
+  typeLetter: (index=0) =>
+    letter = @typeTextSplit[index]
 
-      @typedIndex = index
+    if index is 0
+      @elements.typist.innerHTML = ''
 
-      @typeLetter letter, index
-    , index * @options.letterSelectInterval
+    @elements.typist.innerHTML += letter
 
-  typeLetter: (letter, index) =>
-    @_empty @elements.typist
-
-    @newText.push letter
-    @_setHtml @elements.typist, @newText.join ""
-
-    if @typeTextSplit.length is index + 1
-      @timer = @_delay @slide, @options.interval
+    if index + 1 is @typeTextSplit.length
+      @_delay =>
+        @selectText()
+      , @options.interval
+    else
+      @_delay =>
+        @typeLetter index + 1
+      , @options.letterSelectInterval

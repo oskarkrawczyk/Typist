@@ -101,13 +101,12 @@
         options = {};
       }
       this.typeLetter = __bind(this.typeLetter, this);
-      this.typeLetters = __bind(this.typeLetters, this);
       this.typeText = __bind(this.typeText, this);
       this.selectOffset = __bind(this.selectOffset, this);
       this.selectText = __bind(this.selectText, this);
       this.fetchVariations = __bind(this.fetchVariations, this);
       this.next = __bind(this.next, this);
-      this.slide = __bind(this.slide, this);
+      this.start = __bind(this.start, this);
       this.setupDefaults = __bind(this.setupDefaults, this);
       this.options = {
         typist: element,
@@ -132,120 +131,92 @@
 
     Typist.prototype.setupDefaults = function() {
       this.variations = this.fetchVariations(this.elements.typist);
-      this.newText = [];
-      return this.timer = this._delay(this.slide, this.options.interval);
+      return this._delay(this.start, this.options.interval);
     };
 
-    Typist.prototype.slide = function(forcedText) {
-      var delay, _i, _j, _len, _len1, _ref, _ref1;
-      if (this.timer) {
-        clearTimeout(this.timer);
-      }
-      this.slideCount || (this.slideCount = 0);
-      this.slideCount++;
-      this.offsets.current.text = this.variations[this.offsets.current.index];
-      this.offsets.current.text = this.offsets.current.text.split("");
-      if (this.selectDelays) {
-        _ref = this.selectDelays;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          delay = _ref[_i];
-          clearTimeout(delay);
-        }
-      }
-      this.selectDelays = [];
-      if (this.typingDelays) {
-        _ref1 = this.typingDelays;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          delay = _ref1[_j];
-          clearTimeout(delay);
-        }
-      }
-      this.typingDelays = [];
-      this.typedIndex = 0;
-      this.selectedIndex = 0;
-      this._each(this.offsets.current.text, this.selectText);
-      this.offsets.current.index = this.next(this.offsets.current.index);
-      if (this.slideDelay) {
-        clearTimeout(this.slideDelay);
-      }
-      this.slideDelay = this._delay((function(_this) {
-        return function() {
-          _this.options.currentSlideIndex = _this.offsets.current.index;
-          return _this.typeText(_this.variations[_this.offsets.current.index]);
-        };
-      })(this), this.options.letterSelectInterval * this.offsets.current.text.length);
-      if (this.variations.length <= this.offsets.current.index) {
-        this.offsets.current.index = 0;
-      } else if (this.offsets.current.index === 0) {
-        this.offsets.current.index = this.variations.length;
-      } else {
-        this.offsets.current.index = this.offsets.current.index;
-      }
-      return this.newText.length = 0;
+    Typist.prototype.start = function() {
+      this.currentVariation = this.variations[this.offsets.current.index];
+      this.offsets.current.text = this.currentVariation.split('');
+      return this.selectText();
     };
 
-    Typist.prototype.next = function(offset) {
-      return offset = offset + 1;
+    Typist.prototype.next = function() {
+      this.offsets.current.index++;
+      this.offsets.current.index = this.offsets.current.index % this.variations.length;
+      this.currentVariation = this.variations[this.offsets.current.index];
+      return this.offsets.current.text = this.currentVariation.split('');
     };
 
     Typist.prototype.fetchVariations = function(element) {
       var text, value, variations;
       text = element.getAttribute("data-typist");
-      value = this._getHtml(element);
       variations = text.split(",");
+      value = this._getHtml(element);
       variations.splice(0, 0, value);
       return variations;
     };
 
-    Typist.prototype.selectText = function(letter, index) {
-      var sc;
-      sc = this.slideCount;
-      return this.selectDelays.push(this._delay((function(_this) {
-        return function() {
-          if (_this.slideCount !== sc) {
-            return;
-          }
-          return _this.selectOffset((_this.offsets.current.text.length - index) - 1);
-        };
-      })(this), index * this.options.letterSelectInterval));
+    Typist.prototype.selectText = function(index) {
+      var offset;
+      if (index == null) {
+        index = 0;
+      }
+      offset = (this.offsets.current.text.length - index) - 1;
+      if (offset >= 0) {
+        this.selectOffset(offset);
+      }
+      if (offset > 0) {
+        return this._delay((function(_this) {
+          return function() {
+            return _this.selectText(index + 1);
+          };
+        })(this), this.options.letterSelectInterval);
+      } else {
+        return this._delay((function(_this) {
+          return function() {
+            _this.next();
+            return _this.typeText();
+          };
+        })(this), this.options.letterSelectInterval);
+      }
     };
 
     Typist.prototype.selectOffset = function(offset) {
       var selected, text, unselected;
       text = this.offsets.current.text;
-      selected = text.slice(offset, text.length);
-      selected = selected.join("");
-      unselected = text.slice(0, offset);
-      unselected = unselected.join("");
+      selected = text.slice(offset, text.length).join('');
+      unselected = text.slice(0, offset).join('');
       return this._setHtml(this.elements.typist, "" + unselected + "<em class=\"" + this.options.selectClassName + "\">" + selected + "</em>");
     };
 
-    Typist.prototype.typeText = function(text) {
-      this.typeTextSplit = text.split("");
-      this._each(this.typeTextSplit, this.typeLetters);
-      return this._fireEvent("onSlide", text);
+    Typist.prototype.typeText = function() {
+      this.typeTextSplit = this.currentVariation.split("");
+      this.typeLetter();
+      return this._fireEvent("onSlide", this.currentVariation);
     };
 
-    Typist.prototype.typeLetters = function(letter, index) {
-      var sc;
-      sc = this.slideCount;
-      return this.typingDelays.push(this._delay((function(_this) {
-        return function() {
-          if (_this.slideCount !== sc) {
-            return;
-          }
-          _this.typedIndex = index;
-          return _this.typeLetter(letter, index);
-        };
-      })(this), index * this.options.letterSelectInterval));
-    };
-
-    Typist.prototype.typeLetter = function(letter, index) {
-      this._empty(this.elements.typist);
-      this.newText.push(letter);
-      this._setHtml(this.elements.typist, this.newText.join(""));
-      if (this.typeTextSplit.length === index + 1) {
-        return this.timer = this._delay(this.slide, this.options.interval);
+    Typist.prototype.typeLetter = function(index) {
+      var letter;
+      if (index == null) {
+        index = 0;
+      }
+      letter = this.typeTextSplit[index];
+      if (index === 0) {
+        this.elements.typist.innerHTML = '';
+      }
+      this.elements.typist.innerHTML += letter;
+      if (index + 1 === this.typeTextSplit.length) {
+        return this._delay((function(_this) {
+          return function() {
+            return _this.selectText();
+          };
+        })(this), this.options.interval);
+      } else {
+        return this._delay((function(_this) {
+          return function() {
+            return _this.typeLetter(index + 1);
+          };
+        })(this), this.options.letterSelectInterval);
       }
     };
 
