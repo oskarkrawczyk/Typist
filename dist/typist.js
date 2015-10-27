@@ -133,7 +133,7 @@
     Typist.prototype.setupDefaults = function() {
       this.variations = this.fetchVariations(this.elements.typist);
       this.newText = [];
-      return this.timer = this._periodical(this.slide, this.options.interval);
+      return this.timer = this._delay(this.slide, this.options.interval);
     };
 
     Typist.prototype.slide = function(forcedText) {
@@ -229,10 +229,10 @@
       this.newText.push(letter);
       this._setHtml(this.elements.typist, this.newText.join(""));
       if (this.timer) {
-        clearInterval(this.timer);
+        clearTimeout(this.timer);
       }
       if (this.typeTextSplit.length === index + 1) {
-        return this.timer = this._periodical(this.slide, this.options.interval);
+        return this.timer = this._delay(this.slide, this.options.interval);
       }
     };
 

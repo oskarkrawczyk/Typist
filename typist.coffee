@@ -78,7 +78,7 @@ class @Typist extends Utilities
     @newText    = []
 
     # set up the timer
-    @timer      = @_periodical @slide, @options.interval
+    @timer      = @_delay @slide, @options.interval
 
   slide: (forcedText) =>
 
@@ -174,7 +174,7 @@ class @Typist extends Utilities
     @_setHtml @elements.typist, @newText.join ""
 
     if @timer
-      clearInterval @timer
+      clearTimeout @timer
 
     if @typeTextSplit.length is index + 1
-      @timer = @_periodical @slide, @options.interval
+      @timer = @_delay @slide, @options.interval
