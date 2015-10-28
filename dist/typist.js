@@ -150,6 +150,7 @@
     Typist.prototype.fetchVariations = function(element) {
       var i, text, v, value, variations, _i, _len;
       text = element.getAttribute("data-typist");
+      text = text.replace(/\\'/g, "'");
       text = text.replace(/\\,/g, '!COMMA!');
       variations = text.split(",");
       for (i = _i = 0, _len = variations.length; _i < _len; i = ++_i) {
@@ -158,6 +159,14 @@
       }
       value = this._getHtml(element);
       variations.splice(0, 0, value);
+      i = 0;
+      while (i < variations.length) {
+        if (variations[i] === '') {
+          variations.splice(i, 1);
+        } else {
+          i++;
+        }
+      }
       return variations;
     };
 
@@ -210,7 +219,7 @@
         this.elements.typist.innerHTML = '';
       }
       this.elements.typist.innerHTML += letter;
-      if (index + 1 === this.typeTextSplit.length) {
+      if (index + 1 >= this.typeTextSplit.length) {
         return this._delay((function(_this) {
           return function() {
             return _this.selectText();

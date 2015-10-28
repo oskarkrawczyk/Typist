@@ -85,6 +85,7 @@ class @Typist extends Utilities
 
   fetchVariations: (element) =>
     text       = element.getAttribute "data-typist"
+    text       = text.replace /\\'/g, "'"
     text       = text.replace /\\,/g, '!COMMA!'
     variations = text.split ","
 
@@ -93,6 +94,13 @@ class @Typist extends Utilities
 
     value      = @_getHtml element
     variations.splice 0, 0, value
+
+    i = 0
+    while i < variations.length
+      if variations[i] is ''
+        variations.splice i, 1
+      else
+        i++
 
     variations
 
@@ -134,7 +142,7 @@ class @Typist extends Utilities
 
     @elements.typist.innerHTML += letter
 
-    if index + 1 is @typeTextSplit.length
+    if index + 1 >= @typeTextSplit.length
       @_delay =>
         @selectText()
       , @options.interval
