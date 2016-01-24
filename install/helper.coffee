@@ -1,6 +1,14 @@
+tries = 0
 load = (options) ->
   el = document.querySelector(options.location)
-  return unless el
+  if not el
+    if tries < 12
+      tries++
+      setTimeout ->
+        load options
+      , 250
+
+    return
 
   styles = document.createElement 'div'
   stylesHTML = '<style>'
@@ -61,7 +69,7 @@ load = (options) ->
 
 @TypistInstallHelper =
   init: (options) ->
-    if document.readyState is 'LOADING'
+    if document.readyState is 'loading'
       window.addEventListener 'DOMContentInteractive', -> load options
     else
       load options

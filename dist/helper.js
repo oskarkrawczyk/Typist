@@ -1,10 +1,18 @@
 (function() {
-  var load;
+  var load, tries;
+
+  tries = 0;
 
   load = function(options) {
     var el, styles, stylesHTML;
     el = document.querySelector(options.location);
     if (!el) {
+      if (tries < 12) {
+        tries++;
+        setTimeout(function() {
+          return load(options);
+        }, 250);
+      }
       return;
     }
     styles = document.createElement('div');
@@ -30,7 +38,7 @@
 
   this.TypistInstallHelper = {
     init: function(options) {
-      if (document.readyState === 'LOADING') {
+      if (document.readyState === 'loading') {
         return window.addEventListener('DOMContentInteractive', function() {
           return load(options);
         });
