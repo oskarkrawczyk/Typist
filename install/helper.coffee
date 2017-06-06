@@ -15,29 +15,29 @@ load = (options) ->
 
   if options.typingStyle is 'cursor'
     stylesHTML += """
-      .eager-typist-element .eager-typist-selected {
+      .cf-typist-element .cf-typist-selected {
         display: none;
       }
 
-      @keyframes eager-typist-blinking-cursor {
+      @keyframes cf-typist-blinking-cursor {
         0% { opacity: 1.0; }
         50% { opacity: 0.0; }
         100% { opacity: 1.0; }
       }
 
-      @-webkit-keyframes eager-typist-blinking-cursor {
+      @-webkit-keyframes cf-typist-blinking-cursor {
         0% { opacity: 1.0; }
         50% { opacity: 0.0; }
         100% { opacity: 1.0; }
       }
 
-      .eager-typist-element:after {
+      .cf-typist-element:after {
         content: "\\00a0";
         display: inline-block;
         margin-left: .125em;
         width: .125em;
-        animation: eager-typist-blinking-cursor 1s step-start 0s infinite;
-        -webkit-animation: eager-typist-blinking-cursor 1s step-start 0s infinite;
+        animation: cf-typist-blinking-cursor 1s step-start 0s infinite;
+        -webkit-animation: cf-typist-blinking-cursor 1s step-start 0s infinite;
         background: #000;
         background: #{ options.cursorColor };
       }
@@ -45,7 +45,7 @@ load = (options) ->
 
   if options.typingStyle is 'selection'
     stylesHTML += """
-      .eager-typist-element .eager-typist-selected {
+      .cf-typist-element .cf-typist-selected {
         font-style: normal;
         color: #fff;
         background: #000;
@@ -60,14 +60,14 @@ load = (options) ->
   document.body.appendChild styles
 
   el.innerHTML = Typist.renderVariants el.textContent, options.variations,
-    className: 'eager-typist-element'
+    className: 'cf-typist-element'
 
-  new Typist el.querySelector('.eager-typist-element'),
+  new Typist el.querySelector('.cf-typist-element'),
     letterInterval: 60
     textInterval: 3000
-    selectClassName: 'eager-typist-selected'
+    selectClassName: 'cf-typist-selected'
 
-@TypistInstallHelper =
+@INSTALL_SCOPE =
   init: (options) ->
     if document.readyState is 'loading'
       window.addEventListener 'DOMContentInteractive', -> load options

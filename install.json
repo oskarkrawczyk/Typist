@@ -3,19 +3,19 @@
     "body": [
       {
         "type": "script",
-        "src": "./dist/typist.js"
+        "src": "./build/typist.js"
       },
       {
         "type": "script",
-        "src": "./dist/split.js"
+        "src": "./build/split.js"
       },
       {
         "type": "script",
-        "src": "./dist/helper.js"
+        "src": "./build/helper.js"
       },
       {
         "type": "script",
-        "contents": "TypistInstallHelper.init(INSTALL_OPTIONS);"
+        "contents": "INSTALL_SCOPE.init(INSTALL_OPTIONS)"
       }
     ]
   },
@@ -51,7 +51,7 @@
         "title": "Cursor color",
         "type": "string",
         "format": "color",
-        "default": "#00a549"
+        "default": "#f69259"
       },
       "selectedColor": {
         "order": 3,
@@ -71,7 +71,7 @@
         "title": "Selected text background color",
         "type": "string",
         "format": "color",
-        "default": "#00a549"
+        "default": "#f69259"
       },
       "variations": {
         "order": 5,
