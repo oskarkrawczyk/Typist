@@ -26,7 +26,8 @@
         "title": "Location",
         "type": "string",
         "format": "selector",
-        "description": "Select the region of text you would like to apply Typist to."
+        "description": "Select the region of text you would like to apply Typist to.",
+        "default": "h1"
       },
       "typingStyle": {
         "order": 1,
